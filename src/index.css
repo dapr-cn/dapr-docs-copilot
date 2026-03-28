@@ -1,0 +1,114 @@
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/fraunces/latin-600.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: 42 38% 95%;
+  --foreground: 196 26% 14%;
+  --card: 42 42% 98%;
+  --card-foreground: 196 26% 14%;
+  --popover: 42 42% 98%;
+  --popover-foreground: 196 26% 14%;
+  --primary: 196 32% 18%;
+  --primary-foreground: 42 44% 97%;
+  --secondary: 186 28% 88%;
+  --secondary-foreground: 196 26% 18%;
+  --muted: 42 26% 89%;
+  --muted-foreground: 190 13% 38%;
+  --accent: 177 32% 83%;
+  --accent-foreground: 196 26% 16%;
+  --destructive: 5 74% 53%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 188 17% 78%;
+  --input: 188 17% 78%;
+  --ring: 190 38% 34%;
+  --radius: 1.5rem;
+  --accent-soft: 181 41% 78%;
+  --accent-secondary: 13 64% 76%;
+}
+
+.dark {
+  --background: 196 24% 10%;
+  --foreground: 42 35% 92%;
+  --card: 196 24% 12%;
+  --card-foreground: 42 35% 92%;
+  --popover: 196 24% 12%;
+  --popover-foreground: 42 35% 92%;
+  --primary: 42 35% 92%;
+  --primary-foreground: 196 24% 12%;
+  --secondary: 196 18% 18%;
+  --secondary-foreground: 42 35% 92%;
+  --muted: 196 18% 16%;
+  --muted-foreground: 188 12% 67%;
+  --accent: 180 25% 22%;
+  --accent-foreground: 42 35% 92%;
+  --destructive: 5 62% 46%;
+  --destructive-foreground: 42 35% 92%;
+  --border: 191 12% 24%;
+  --input: 191 12% 24%;
+  --ring: 182 35% 68%;
+  --accent-soft: 177 28% 20%;
+  --accent-secondary: 13 44% 28%;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-serif: 'Fraunces', serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --radius-sm: calc(var(--radius) - 0.5rem);
+  --radius-md: calc(var(--radius) - 0.25rem);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 0.5rem);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: radial-gradient(circle at top, hsl(var(--accent-soft) / 0.18), transparent 30%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--background)));
+    min-height: 100vh;
+  }
+
+  button,
+  input,
+  textarea {
+    font: inherit;
+  }
+
+  ::selection {
+    background: hsl(var(--accent-secondary) / 0.35);
+  }
+}
