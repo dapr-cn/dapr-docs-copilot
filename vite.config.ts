@@ -12,6 +12,7 @@ import {
   resolveGlossaryFilePath,
   updateGlossaryTermInFile,
 } from './src/lib/zh-glossary-admin'
+import { createDefaultPrWorkbenchAdmin } from './src/server/pr-workbench-admin'
 import { createDefaultTranslationWorkbenchAdmin } from './src/server/translation-workbench-admin'
 
 type ErrorResponse = {
@@ -22,11 +23,29 @@ type ErrorResponse = {
   }
 }
 
+type ApiSuccess<T> = {
+  ok: true
+  data: T
+}
+
+type ApiFailure = {
+  ok: false
+  error: ErrorResponse['error']
+}
+
 type JsonRecord = Record<string, unknown>
 
 function sendJson(res: ServerResponse, statusCode: number, payload: unknown) {
   res.writeHead(statusCode, { 'Content-Type': 'application/json' })
   res.end(JSON.stringify(payload))
+}
+
+function sendApiSuccess<T>(res: ServerResponse, statusCode: number, data: T) {
+  sendJson(res, statusCode, { ok: true, data } satisfies ApiSuccess<T>)
+}
+
+function sendApiFailure(res: ServerResponse, statusCode: number, error: ErrorResponse['error']) {
+  sendJson(res, statusCode, { ok: false, error } satisfies ApiFailure)
 }
 
 function isObject(value: unknown): value is JsonRecord {
@@ -112,6 +131,27 @@ function statusCodeForError(code: string): number {
     code === 'invalid_concurrency'
   ) {
     return 400
+  }
+
+  if (
+    code === 'prerequisite_failed' ||
+    code === 'session_stale' ||
+    code === 'zh_dirty' ||
+    code === 'zh_diverged' ||
+    code === 'zh_pull_failed' ||
+    code === 'zh_pull_not_available' ||
+    code === 'zh_push_failed' ||
+    code === 'zh_push_not_available' ||
+    code === 'fork_commit_failed' ||
+    code === 'fork_commit_not_available' ||
+    code === 'fork_dirty' ||
+    code === 'fork_fast_forward_failed' ||
+    code === 'fork_push_failed' ||
+    code === 'fork_push_not_available' ||
+    code === 'build_failed' ||
+    code === 'build_command_missing'
+  ) {
+    return 409
   }
 
   return 500
@@ -324,6 +364,77 @@ function createGlossaryAdminPlugin(): Plugin {
   }
 }
 
+
+function createPrWorkbenchPlugin(): Plugin {
+  return {
+    name: 'pr-workbench-dev-endpoints',
+    configureServer(server: ViteDevServer) {
+      const workspaceRoot = path.resolve(__dirname, '..', '..')
+      const admin = createDefaultPrWorkbenchAdmin(workspaceRoot)
+
+      server.middlewares.use(async (req, res, next) => {
+        if (!req.url?.startsWith('/__admin/pr-workbench')) {
+          next()
+          return
+        }
+
+        const url = new URL(req.url, 'http://localhost')
+        const pathname = url.pathname
+
+        try {
+          if (req.method === 'GET' && pathname === '/__admin/pr-workbench/versions') {
+            sendApiSuccess(res, 200, await admin.listVersions())
+            return
+          }
+
+          const sessionMatch = pathname.match(/^\/__admin\/pr-workbench\/sessions\/([^/]+)$/)
+          if (req.method === 'GET' && sessionMatch) {
+            sendApiSuccess(res, 200, await admin.getSession(decodeURIComponent(sessionMatch[1])))
+            return
+          }
+
+          const actionMatch = pathname.match(/^\/__admin\/pr-workbench\/sessions\/([^/]+)\/(check-zh-sync|pull-zh|push-zh|update-fork|commit-fork|push-fork|verify-build)$/)
+          if (req.method === 'POST' && actionMatch) {
+            const version = decodeURIComponent(actionMatch[1])
+            const action = actionMatch[2]
+            if (action === 'check-zh-sync') {
+              sendApiSuccess(res, 200, await admin.checkZhSync(version))
+              return
+            }
+            if (action === 'pull-zh') {
+              sendApiSuccess(res, 200, await admin.pullZh(version))
+              return
+            }
+            if (action === 'push-zh') {
+              sendApiSuccess(res, 200, await admin.pushZh(version))
+              return
+            }
+            if (action === 'update-fork') {
+              sendApiSuccess(res, 200, await admin.updateFork(version))
+              return
+            }
+            if (action === 'commit-fork') {
+              sendApiSuccess(res, 200, await admin.commitFork(version))
+              return
+            }
+            if (action === 'push-fork') {
+              sendApiSuccess(res, 200, await admin.pushFork(version))
+              return
+            }
+            sendApiSuccess(res, 200, await admin.verifyBuild(version))
+            return
+          }
+
+          sendApiFailure(res, 404, { code: 'route_not_found', message: 'PR 工作台端点不存在' })
+        } catch (error) {
+          const payload = toWorkbenchErrorPayload(error)
+          sendApiFailure(res, statusCodeForError(payload.code), payload)
+        }
+      })
+    },
+  }
+}
+
 function createTranslationWorkbenchPlugin(): Plugin {
   return {
     name: 'translation-workbench-dev-endpoints',
@@ -409,7 +520,7 @@ function createTranslationWorkbenchPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), createZhSyncPlugin(), createGlossaryAdminPlugin(), createTranslationWorkbenchPlugin()],
+  plugins: [react(), tailwindcss(), createZhSyncPlugin(), createGlossaryAdminPlugin(), createTranslationWorkbenchPlugin(), createPrWorkbenchPlugin()],
   server: {
     fs: {
       allow: [path.resolve(__dirname, '..')],
