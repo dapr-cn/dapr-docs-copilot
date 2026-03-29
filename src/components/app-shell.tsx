@@ -1,19 +1,13 @@
 import { Link, Outlet, useRouterState } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { Bell, BookCopy, Bot, LayoutDashboard, Search, Settings2, Sparkles } from 'lucide-react'
+import { Bell, Search, Sparkles } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { PRIMARY_NAVIGATION } from '@/lib/primary-navigation'
 import { cn } from '@/lib/utils'
-
-const navigation = [
-  { to: '/', label: '总览', icon: LayoutDashboard, exact: true },
-  { to: '/sites', label: '站点', icon: BookCopy, exact: false },
-  { to: '/copilot', label: 'Copilot', icon: Bot, exact: false },
-  { to: '/settings', label: '设置', icon: Settings2, exact: false },
-] as const
 
 export function AppShell() {
   const pathname = useRouterState({ select: (state) => state.location.pathname })
@@ -25,14 +19,14 @@ export function AppShell() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--accent-soft))_0,transparent_38%),radial-gradient(circle_at_bottom_right,hsl(var(--accent-secondary)/0.24)_0,transparent_30%)]" />
         <div className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(hsl(var(--border)/0.35)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--border)/0.35)_1px,transparent_1px)] [background-size:44px_44px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
 
-        <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col lg:border-r lg:border-border/70 lg:bg-card/70 lg:px-6 lg:py-8 lg:backdrop-blur-xl">
+        <aside className="hidden lg:fixed lg:inset-y-0 lg:z-40 lg:flex lg:w-72 lg:flex-col lg:border-r lg:border-border/70 lg:bg-card/70 lg:px-6 lg:py-8 lg:backdrop-blur-xl">
           <div className="space-y-4">
-            <Badge variant="outline" className="w-fit bg-background/65">Signal Deck</Badge>
+            <Badge variant="outline" className="w-fit bg-background/65">Zh Translation</Badge>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Dapr Docs</p>
-              <h1 className="mt-3 font-serif text-3xl tracking-tight">Copilot Console</h1>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Dapr Docs Console</p>
+              <h1 className="mt-3 font-serif text-3xl tracking-tight">Translation Console</h1>
               <p className="mt-3 max-w-xs text-sm leading-6 text-muted-foreground">
-                单站管理台。以 TanStack 驱动状态，以 shadcn/ui 承载交互。
+                去 demo 化后，首页只服务中文数据同步、源文追踪与校审焦点。
               </p>
             </div>
           </div>
@@ -40,7 +34,7 @@ export function AppShell() {
           <Separator className="my-6" />
 
           <nav className="flex flex-1 flex-col gap-2">
-            {navigation.map((item) => {
+            {PRIMARY_NAVIGATION.map((item) => {
               const Icon = item.icon
               const active = item.exact ? pathname === item.to : pathname.startsWith(item.to)
 
@@ -67,14 +61,14 @@ export function AppShell() {
             </div>
             <div className="mt-4 flex items-center justify-between rounded-2xl bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
               <span>自动化巡检</span>
-              <span className="font-semibold text-emerald-700">正常</span>
+              <span className="font-semibold text-emerald-700">管道在线</span>
             </div>
           </div>
         </aside>
 
-        <div className="relative flex min-h-screen flex-1 flex-col lg:pl-72">
+        <div className="relative flex min-h-screen flex-1 flex-col lg:ml-72">
           <header className="sticky top-0 z-30 border-b border-border/70 bg-background/82 backdrop-blur-xl">
-            <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
+            <div className="flex w-full items-center gap-3 px-4 py-4 sm:px-6 lg:px-8">
               <div className="flex flex-1 items-center gap-3 rounded-full border border-border bg-card/75 px-4 py-2 shadow-sm">
                 <Search className="size-4 text-muted-foreground" />
                 <Input
@@ -91,8 +85,8 @@ export function AppShell() {
                 新建任务
               </Button>
             </div>
-            <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-4 pb-4 sm:px-6 lg:hidden lg:px-8">
-              {navigation.map((item) => {
+            <div className="flex w-full gap-2 overflow-x-auto px-4 pb-4 sm:px-6 lg:hidden lg:px-8">
+              {PRIMARY_NAVIGATION.map((item) => {
                 const Icon = item.icon
                 const active = item.exact ? pathname === item.to : pathname.startsWith(item.to)
 
@@ -114,7 +108,7 @@ export function AppShell() {
             </div>
           </header>
 
-          <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+          <main className="flex w-full flex-1 flex-col px-4 pb-10 pt-6 sm:px-6 lg:px-8">
             <Outlet />
           </main>
         </div>

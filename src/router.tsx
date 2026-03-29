@@ -1,9 +1,10 @@
 import { createRootRouteWithContext, createRoute, createRouter } from '@tanstack/react-router'
 import { AppShell } from '@/components/app-shell'
-import { CopilotPage } from '@/pages/copilot-page'
 import { DashboardPage } from '@/pages/dashboard-page'
 import { SettingsPage } from '@/pages/settings-page'
 import { SitesPage } from '@/pages/sites-page'
+import { TranslationWorkbenchPage } from '@/pages/translation-workbench-page'
+import { ZhDataPage } from '@/pages/zh-data-page'
 import type { QueryClient } from '@tanstack/react-query'
 
 export type RouterContext = {
@@ -26,10 +27,16 @@ const sitesRoute = createRoute({
   component: SitesPage,
 })
 
-const copilotRoute = createRoute({
+const zhDataRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: 'copilot',
-  component: CopilotPage,
+  path: 'zh-data',
+  component: ZhDataPage,
+})
+
+const translationWorkbenchRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: 'translation-workbench',
+  component: TranslationWorkbenchPage,
 })
 
 const settingsRoute = createRoute({
@@ -40,8 +47,9 @@ const settingsRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   dashboardRoute,
+  translationWorkbenchRoute,
+  zhDataRoute,
   sitesRoute,
-  copilotRoute,
   settingsRoute,
 ])
 
