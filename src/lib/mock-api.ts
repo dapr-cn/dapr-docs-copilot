@@ -1,3 +1,5 @@
+import { fetchZhDashboardView } from '@/lib/zh-data'
+
 export type Metric = {
   label: string
   value: string
@@ -41,39 +43,6 @@ export type CopilotPayload = {
   sources: KnowledgeSource[]
   prompts: string[]
   automations: ActivityItem[]
-}
-
-const dashboardPayload: DashboardPayload = {
-  metrics: [
-    { label: '受管仓库', value: '7', delta: '+1 本周', tone: 'good' },
-    { label: '待合并变更', value: '12', delta: '3 条高优先', tone: 'warn' },
-    { label: '知识库新鲜度', value: '94%', delta: '近 24h 已同步', tone: 'good' },
-    { label: '发布链路健康度', value: 'A-', delta: '队列稳定', tone: 'stable' },
-  ],
-  activities: [
-    {
-      id: 'a1',
-      title: 'v1.17 中文站完成增量拉取',
-      detail: '同步 43 篇文档，2 篇待人工校审。',
-      time: '14:08',
-      tone: 'good',
-    },
-    {
-      id: 'a2',
-      title: 'Copilot 提示词库进入评审',
-      detail: '新增术语对齐规则与多版本检索策略。',
-      time: '13:26',
-      tone: 'stable',
-    },
-    {
-      id: 'a3',
-      title: 'fork-v1.15 存在回归风险',
-      detail: '上游文档目录变更，需更新映射规则。',
-      time: '11:41',
-      tone: 'warn',
-    },
-  ],
-  focus: ['版本对齐', '翻译质检', '提示词治理', '发布回归巡检'],
 }
 
 const sitesPayload: SiteRecord[] = [
@@ -160,8 +129,7 @@ async function wait(ms = 180) {
 }
 
 export async function fetchDashboard() {
-  await wait()
-  return dashboardPayload
+  return fetchZhDashboardView()
 }
 
 export async function fetchSites() {
