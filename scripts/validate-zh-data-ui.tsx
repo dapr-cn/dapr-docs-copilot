@@ -281,7 +281,8 @@ const failedJob: TranslationWorkbenchJob = {
 }
 
 assert.equal(PRIMARY_NAVIGATION[0].label, '翻译工作台')
-assert.equal(PRIMARY_NAVIGATION[1].label, '中文数据')
+assert.equal(PRIMARY_NAVIGATION[1].label, 'PR 工作台')
+assert.equal(PRIMARY_NAVIGATION[2].label, '中文数据')
 assert.ok(PRIMARY_NAVIGATION.every((item) => item.label !== 'Copilot'))
 assert.deepEqual(
   ZH_DATA_TABS.map((tab) => tab.id),
