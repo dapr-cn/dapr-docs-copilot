@@ -8,6 +8,10 @@
   - 扫描 `repos/*_zh/data` 可用版本
   - 读取未翻译 / 待翻译文件
   - 批量建队、有界并发翻译、失败重试
+- `/pr-workbench`：PR 工作台
+  - 扫描同时具备 `repos/<version>_zh` 与 `repos/fork-<version>` 的版本
+  - 校验 zh 仓 dirty / upstream / ahead-behind
+  - fast-forward fork、切换 `translations/docs-zh` submodule、执行本地 build
 - `/zh-data`：中文数据台
   - `同步状态`
   - `术语表`
@@ -52,6 +56,27 @@ npm run zh:data:sync -- \
   --version v1.17
 ```
 
+
+## PR 工作台前提
+
+重点是：此页只做 PR 前门禁，不代替 `git push`、提交或创建 GitHub PR。
+
+- zh 仓约定：`repos/<version>_zh`，当前工作分支需已跟踪 upstream（通常为 `origin/<branch>`）
+- fork 仓约定：`repos/fork-<version>`，当前工作分支需存在 upstream remote `source`
+- docs-zh submodule 路径固定：`translations/docs-zh`
+- 默认构建入口：fork 仓 `package.json` 的 `scripts.build`，页面执行命令为 `npm run build`
+- 任何会改工作树的步骤前，目标仓必须干净；否则工作台直接阻断
+
+常见阻断原因：
+
+- zh 仓有未提交文件，或当前分支未配置 upstream
+- zh 仓相对 upstream 存在 ahead / behind 差异，说明未 push 或未 pull
+- 若仅 `ahead` 或仅 `behind` 且工作区干净，可直接点页面内 `直接推送 zh` / `直接拉取 zh`
+- fork 仓有未提交文件，无法安全 fast-forward
+- fork 分支已分叉，`merge --ff-only` 失败
+- `translations/docs-zh` 尚未初始化，或目标 zh SHA 无法从 submodule remote 获取
+- fork 仓缺少 `scripts.build`，或 `npm run build` 返回非零退出码
+
 ## 本地文档验证站点
 
 重点是：管理台仓现可直接桥接 zh 仓 runner，无须手动再切到 `repos/v1.17_zh`。
@@ -95,6 +120,19 @@ npm run docs:verify -- \
 - `previewUrl=http://127.0.0.1:1313/zh-hans/`
 
 若依赖缺失或路径错误，命令会在启动前直接失败，并指出缺失的 `hugo`、`sourceRepo/hugo.yaml` 或 `zhRepo/translated_content/zh_CN`。
+
+
+## PR 工作台使用
+
+1. 打开 `/pr-workbench`
+2. 选择版本，确认 `zh / fork / docs-zh` 路径锁定
+3. 执行 `zh 仓同步校验`；若仅 ahead 或仅 behind，可直接点 `直接推送 zh` / `直接拉取 zh`
+4. 执行 `更新 fork 与 submodule`，确认 fork HEAD 与 docs-zh SHA
+5. 点 `提交 fork 变更`，将 docs-zh 指针写入 fork 当前分支
+6. 执行 `本地构建验证`，成功后读取 Ready 摘要
+7. 点 `推送 fork`，将已验证分支推至 `origin`
+
+结论是：Ready 仅绑定当前 zh SHA、fork SHA 与 docs-zh SHA。其间任一仓状态变化，后续步骤会自动失效，需重跑。
 
 ## 工作台使用
 
@@ -145,6 +183,7 @@ npm run build
 npm run docs:verify:test
 npm run zh:data:test
 npm run translation-workbench:test
+npm run pr-workbench:test
 npm run translation-output:test
 ../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-ui.tsx
 ../../node_modules/.bin/tsx scripts/validate-zh-glossary-admin.ts
