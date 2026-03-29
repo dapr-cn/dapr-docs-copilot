@@ -7,7 +7,17 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "translation-workbench:backfill-aliases": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/backfill-translation-aliases.ts",
+    "translation-workbench:backfill-aliases:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-alias-backfill.ts",
+    "translation-output:validate": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output.ts",
+    "translation-output:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-validator.ts && ../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-cli.ts",
+    "translation-integrity:repair": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/repair-translation-integrity.ts",
+    "translation-pipeline:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-pipeline-integrity.ts",
+    "zh:data:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-state.ts && ../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-ui.tsx",
+    "translation-workbench:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-workbench-admin.ts",
+    "docs:verify": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/start-local-docs-verification.ts",
+    "docs:verify:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-local-docs-verification.ts"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
@@ -25,6 +35,7 @@
     "@tanstack/router-devtools": "^1.166.11",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "handlebars": "^4.7.9",
     "lucide-react": "^1.7.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
