@@ -33,8 +33,8 @@
 ## 启动
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 开发模式会直接读取同级仓：
@@ -45,12 +45,12 @@ npm run dev
 - `repos/*_zh/data/source/**`
 - `repos/*_zh/translated_content/zh_CN/**`
 
-`/zh-data` 下的术语表行内 CRUD 也只在 Vite 开发态可写，依赖本地 `GET/POST/PATCH/DELETE /__admin/zh-data/glossary` 端点；若未通过 `npm run dev` 启动，术语表会自动降级为只读。
+`/zh-data` 下的术语表行内 CRUD 也只在 Vite 开发态可写，依赖本地 `GET/POST/PATCH/DELETE /__admin/zh-data/glossary` 端点；若未通过 `pnpm run dev` 启动，术语表会自动降级为只读。
 
 如需最新数据，先回到仓库根目录执行：
 
 ```bash
-npm run zh:data:sync -- \
+pnpm run zh:data:sync \
   --source-repo repos/v1.17 \
   --zh-repo repos/v1.17_zh \
   --version v1.17
@@ -84,19 +84,19 @@ npm run zh:data:sync -- \
 默认启动：
 
 ```bash
-npm run docs:verify
+pnpm run docs:verify
 ```
 
 仅做预检与配置生成：
 
 ```bash
-npm run docs:verify -- --dry-run
+pnpm run docs:verify --dry-run
 ```
 
 常见参数：
 
 ```bash
-npm run docs:verify -- \
+pnpm run docs:verify \
   --version v1.17 \
   --host 127.0.0.1 \
   --port 1417
@@ -105,7 +105,7 @@ npm run docs:verify -- \
 如需覆盖路径：
 
 ```bash
-npm run docs:verify -- \
+pnpm run docs:verify \
   --source-repo /abs/path/to/repos/v1.17 \
   --zh-repo /abs/path/to/repos/v1.17_zh \
   --hugo-bin /usr/bin/hugo
@@ -158,7 +158,7 @@ Markdown 成功路径现为“归一化 -> 结构校验 -> 写入”；若 front
 单文件显式模式：
 
 ```bash
-npm run translation-output:validate -- \
+pnpm run translation-output:validate \
   --source repos/v1.17_zh/data/source/docs/getting-started/quickstart.md \
   --target repos/v1.17_zh/translated_content/zh_CN/docs/getting-started/quickstart.md
 ```
@@ -166,7 +166,7 @@ npm run translation-output:validate -- \
 版本批量模式：
 
 ```bash
-npm run translation-output:validate -- \
+pnpm run translation-output:validate \
   --version v1.17 \
   --bucket docs \
   --relative-path getting-started/quickstart.md
@@ -179,12 +179,12 @@ npm run translation-output:validate -- \
 ## 构建与校验
 
 ```bash
-npm run build
-npm run docs:verify:test
-npm run zh:data:test
-npm run translation-workbench:test
-npm run pr-workbench:test
-npm run translation-output:test
+pnpm run build
+pnpm run docs:verify:test
+pnpm run zh:data:test
+pnpm run translation-workbench:test
+pnpm run pr-workbench:test
+pnpm run translation-output:test
 ../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-ui.tsx
 ../../node_modules/.bin/tsx scripts/validate-zh-glossary-admin.ts
 ```
@@ -208,19 +208,19 @@ npm run translation-output:test
 重点是：上述 `aliases` 本地化只自动覆盖新写入译文。若仓内已有历史译文，宜先执行一次回填：
 
 ```bash
-npm run translation-workbench:backfill-aliases
+pnpm run translation-workbench:backfill-aliases
 ```
 
 若只想预览将改多少文件，可先跑：
 
 ```bash
-npm run translation-workbench:backfill-aliases -- --dry-run
+pnpm run translation-workbench:backfill-aliases --dry-run
 ```
 
 若只处理单一版本，可追加：
 
 ```bash
-npm run translation-workbench:backfill-aliases -- --version v1.17
+pnpm run translation-workbench:backfill-aliases --version v1.17
 ```
 
 ## 术语表 CRUD
