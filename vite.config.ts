@@ -186,7 +186,7 @@ function runCommand(command: string, args: string[], cwd: string, env: NodeJS.Pr
 
 function createZhSyncPlugin(): Plugin {
   const gitCommand = process.platform === 'win32' ? 'git.exe' : 'git'
-  const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm'
+  const pnpmCommand = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
   let running = false
 
   return {
@@ -229,8 +229,8 @@ function createZhSyncPlugin(): Plugin {
           }
 
           const syncResult = await runCommand(
-            npmCommand,
-            ['run', 'zh:data:sync', '--', '--source-repo', `repos/${version}`, '--zh-repo', `repos/${version}_zh`, '--version', version],
+            pnpmCommand,
+            ['run', 'zh:data:sync', '--source-repo', `repos/${version}`, '--zh-repo', `repos/${version}_zh`, '--version', version],
             workspaceRoot,
             process.env,
           )
