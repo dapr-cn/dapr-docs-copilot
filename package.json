@@ -8,17 +8,17 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "translation-workbench:backfill-aliases": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/backfill-translation-aliases.ts",
-    "translation-workbench:backfill-aliases:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-alias-backfill.ts",
-    "translation-output:validate": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output.ts",
-    "translation-output:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-validator.ts && ../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-cli.ts",
-    "translation-integrity:repair": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/repair-translation-integrity.ts",
-    "translation-pipeline:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-pipeline-integrity.ts",
-    "zh:data:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-state.ts && ../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-ui.tsx",
-    "translation-workbench:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-translation-workbench-admin.ts",
-    "docs:verify": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/start-local-docs-verification.ts",
-    "docs:verify:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-local-docs-verification.ts",
-    "pr-workbench:test": "../../node_modules/.bin/tsx --tsconfig tsconfig.node.json scripts/validate-pr-workbench-admin.ts && ../../node_modules/.bin/tsx --tsconfig tsconfig.app.json scripts/validate-pr-workbench-ui.tsx"
+    "translation-workbench:backfill-aliases": "tsx --tsconfig tsconfig.node.json scripts/backfill-translation-aliases.ts",
+    "translation-workbench:backfill-aliases:test": "tsx --tsconfig tsconfig.node.json scripts/validate-translation-alias-backfill.ts",
+    "translation-output:validate": "tsx --tsconfig tsconfig.node.json scripts/validate-translation-output.ts",
+    "translation-output:test": "tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-validator.ts && tsx --tsconfig tsconfig.node.json scripts/validate-translation-output-cli.ts",
+    "translation-integrity:repair": "tsx --tsconfig tsconfig.node.json scripts/repair-translation-integrity.ts",
+    "translation-pipeline:test": "tsx --tsconfig tsconfig.node.json scripts/validate-translation-pipeline-integrity.ts",
+    "zh:data:test": "tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-state.ts && tsx --tsconfig tsconfig.app.json scripts/validate-zh-data-ui.tsx",
+    "translation-workbench:test": "tsx --tsconfig tsconfig.node.json scripts/validate-translation-workbench-admin.ts",
+    "docs:verify": "tsx --tsconfig tsconfig.node.json scripts/start-local-docs-verification.ts",
+    "docs:verify:test": "tsx --tsconfig tsconfig.node.json scripts/validate-local-docs-verification.ts",
+    "pr-workbench:test": "tsx --tsconfig tsconfig.node.json scripts/validate-pr-workbench-admin.ts && tsx --tsconfig tsconfig.app.json scripts/validate-pr-workbench-ui.tsx"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
@@ -55,8 +55,10 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
     "tailwindcss": "^4.2.2",
+    "tsx": "^4.23.15",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.57.2",
     "vite": "^8.0.3"
-  }
+  },
+  "packageManager": "pnpm@12.16.1"
 }
